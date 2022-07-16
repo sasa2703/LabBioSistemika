@@ -12,6 +12,11 @@ namespace Lab
         protected List<IExperiment> experiments;
         protected List<IPlate> plates;
 
+        private int positionInSamplesAndReagens = 0;
+        private int numberOfReplicate = 1;
+        private int originalColumnsOrder;
+        private int initialColumn = 1;
+
         public PlatePlacement()
         {
             experiments = new List<IExperiment>();
@@ -27,6 +32,24 @@ namespace Lab
             int columnId = 1;
             int rowId = 1;
             var wells = new List<Well>();
+            SetColumnOrder(columns, experiment);
+            FillWells(size, rows, experiment, ref columnId, ref rowId, wells);
+
+            Util.ToJsonFile(wells);
+
+            return wells;
+        }
+
+        private void FillWells(int size, int rows, IExperiment experiment, ref int columnId, ref int rowId, List<Well> wells)
+        {
+            for (int i = 1; i < size - 1; i++)
+            {
+                InsertInWells(wells, rows, experiment, ref columnId, ref rowId);
+            }
+        }
+
+        private void SetColumnOrder(int columns, IExperiment experiment)
+        {
             if (experiment.SamplesInExperiment == null)
             {
                 columnsOrder = columns;
@@ -37,15 +60,6 @@ namespace Lab
                 columnsOrder = experiment.SamplesInExperiment.Count / 2;
                 originalColumnsOrder = columnsOrder;
             }
-
-            for (int i = 1; i <= size; i++)
-            {
-                InsertInWells(wells, rows, experiment, ref columnId, ref rowId);
-            }
-
-            Util.ToJsonFile(wells);
-
-            return wells;
         }
 
         protected void CheckForWrongSettup(int numberOfReplicates, List<Sample> samplesToAdd, List<Reagent> reagents)
@@ -66,11 +80,7 @@ namespace Lab
 
             if (reagents.GroupBy(x => x.Name).Count() != reagents.Count())
                 throw new Exception("Reagents name must be unique!");
-        }
-
-        private int positionInSamplesAndReagens = 0;
-        private int numberOfReplicate = 1;
-        private int originalColumnsOrder;
+        }       
 
         private void InsertInWells(List<Well> wells, int rows, IExperiment experiment, ref int columnId, ref int rowId)
         {
@@ -78,7 +88,10 @@ namespace Lab
             if (experiment.SamplesInExperiment != null && (positionInSamplesAndReagens < experiment.SamplesInExperiment.Count || positionInSamplesAndReagens < experiment.ReagentsInExperiment.Count))
                 AddSamplesAndReagensToWell(wells, experiment, columnId, rowId);
             else if (CheckForReplication(experiment))
+            {
                 ResetPositionInSamplesAndReagens();
+                AddSamplesAndReagensToWell(wells, experiment, columnId, rowId);
+            }
             else
                 AddWellsWithNull(wells, columnId, rowId);
 
@@ -87,13 +100,19 @@ namespace Lab
             if (rowId < rows && columnId > columnsOrder)
             {
                 rowId++;
-                columnId = 1;
+                columnId = initialColumn;
             }
 
-            if (rowId == rows && columnId == columnsOrder)
+            if (rowId == rows && columnId == columnsOrder &&  wells.Count() < (int)plate.Size - 1)
             {
-                columnsOrder = columnsOrder + originalColumnsOrder; 
-                columnId++;
+                if (positionInSamplesAndReagens < experiment.SamplesInExperiment.Count)
+                {
+                    AddSamplesAndReagensToWell(wells, experiment, columnId, rowId);
+                    ResetPositionInSamplesAndReagens();
+                }
+                initialColumn = columnsOrder + 1;
+                columnsOrder = columnsOrder + originalColumnsOrder;
+                columnId = initialColumn;
                 rowId = 1;
             }
         }
