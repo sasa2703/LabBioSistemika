@@ -31,8 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevExpress.Data.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Xpo.v20.2, Version=20.2.5.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -46,12 +44,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPlatePlacement.cs" />
+    <Compile Include="IPlateAdding.cs" />
     <Compile Include="Models\Experiment.cs" />
     <Compile Include="Models\IExperiment.cs" />
     <Compile Include="Models\IPlate.cs" />
-    <Compile Include="Models\IReagent.cs" />
-    <Compile Include="Models\ISample.cs" />
     <Compile Include="Models\Plate.cs" />
     <Compile Include="Models\Well.cs" />
     <Compile Include="PlateFactory.cs" />

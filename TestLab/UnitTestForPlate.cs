@@ -15,12 +15,12 @@ namespace TestLab
             platePlacement = new PlatePlacement();
         }
 
-        IPlatePlacement plate;
+        IPlateAdding plate;
         List<Sample> samples;
         List<Reagent> reagents;
         PlateFactory plateFactory;
 
-        private void SetPlate(PlateSizeEnum size, out IPlatePlacement plate, out List<Sample> samples, out List<Reagent> reagents)
+        private void SetPlate(PlateSizeEnum size, out IPlateAdding plate, out List<Sample> samples, out List<Reagent> reagents)
         {
             plateFactory = new PlateFactory();
             plate = plateFactory.SetPlate(size);
@@ -87,10 +87,8 @@ namespace TestLab
         [Test]
         public void SetAllNotNullTo384Plate()
         {
-            var platePlacement = new PlateFactory();
-            var plate = platePlacement.SetPlate(PlateSizeEnum.WELLS_384);
-            List<Sample> samples = new List<Sample>();
-            List<Reagent> reagents = new List<Reagent>();
+            SetPlate(PlateSizeEnum.WELLS_384, out plate, out samples, out reagents);
+
             for (int i = 0; i < 384; i++)
             {
                 reagents.Add(new Reagent() { Name = "Reag" + i });

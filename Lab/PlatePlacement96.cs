@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Lab
 {
-    class PlatePlacement96 : PlatePlacement, IPlatePlacement
+    public class PlatePlacement96 : PlatePlacement, IPlateAdding
     {
         public void AddPlate(PlateSizeEnum plateSizeEnum, int id)
         {
             plate = new Plate(plateSizeEnum, id);
             plates.Add(plate);
         }
-        public override List<Well> FillPlate()
+        public List<Well> FillPlate()
         {          
             foreach (var experiment in experiments)
             {
@@ -20,11 +20,9 @@ namespace Lab
             return null;
         }
 
-        void IPlatePlacement.AddSamplesAndReagents(int numberOfReplicates, List<Sample> samplesToAdd, List<Reagent> reagentsToAdd)
+        void IPlateAdding.AddSamplesAndReagents(int numberOfReplicates, List<Sample> samplesToAdd, List<Reagent> reagentsToAdd)
         {
-            CheckForWrongSettup(numberOfReplicates, samplesToAdd,reagentsToAdd);
-
-            experiments.Add(new Experiment(numberOfReplicates, samplesToAdd, reagentsToAdd));
+            base.AddSamplesAndReagents(numberOfReplicates, samplesToAdd, reagentsToAdd);
         }
         
     }

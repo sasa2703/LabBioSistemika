@@ -2,7 +2,7 @@
 {
     public class PlateFactory
     {
-        public IPlatePlacement SetPlate(PlateSizeEnum size)
+        public IPlateAdding SetPlate(PlateSizeEnum size)
         {
             if (size == PlateSizeEnum.WELLS_96)
             {

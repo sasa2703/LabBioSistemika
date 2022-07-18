@@ -1,6 +1,6 @@
 ﻿namespace Lab
 {
-    public class Reagent : IReagent
+    public class Reagent
     {
         public string Name { get; set; }
     }
