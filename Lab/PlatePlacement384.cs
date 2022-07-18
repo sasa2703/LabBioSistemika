@@ -1,20 +1,16 @@
 ﻿using Lab.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab
 {
-    public class PlatePlacement384 : PlatePlacement, IPlatePlacement
+    public class PlatePlacement384 : PlatePlacement, IPlateAdding
     {
         public void AddPlate(PlateSizeEnum plateSizeEnum, int id)
         {
             plate = new Plate(plateSizeEnum, id);
             plates.Add(plate);
         }
-        public override List<Well> FillPlate()
+        public List<Well> FillPlate()
         {            
             foreach (var experiment in experiments)
             {
@@ -24,11 +20,9 @@ namespace Lab
             return null;
         }
 
-        void IPlatePlacement.AddSamplesAndReagents(int numberOfReplicates, List<Sample> samplesToAdd, List<Reagent> reagentsToAdd)
+        void IPlateAdding.AddSamplesAndReagents(int numberOfReplicates, List<Sample> samplesToAdd, List<Reagent> reagentsToAdd)
         {
-            CheckForWrongSettup(numberOfReplicates, samplesToAdd,reagentsToAdd);
-
-            experiments.Add(new Experiment(numberOfReplicates, samplesToAdd, reagentsToAdd));
+            base.AddSamplesAndReagents(numberOfReplicates, samplesToAdd, reagentsToAdd);            
         }
 
     }
