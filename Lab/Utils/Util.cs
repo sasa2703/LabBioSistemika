@@ -7,7 +7,7 @@ namespace Lab.Utils
 {
     public static class Util
     {
-        static string path = @"D:\LabTest\plate_test.json";
+        static string path = @".\LabTest\plate_test.json";
         public static void ToJsonFile(List<Well> wells)
         {
             string json = JsonConvert.SerializeObject(wells.ToArray());
